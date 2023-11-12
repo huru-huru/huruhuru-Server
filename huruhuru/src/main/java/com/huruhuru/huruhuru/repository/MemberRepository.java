@@ -1,4 +1,9 @@
 package com.huruhuru.huruhuru.repository;
 
-public class MemberRepository {
+import com.huruhuru.huruhuru.domain.entity.MemberEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
+
+    MemberEntity findByNickname(String nickname);
 }
