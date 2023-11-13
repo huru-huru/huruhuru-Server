@@ -10,17 +10,18 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class MemberController {
 
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public String signup(MemberSignInRequest request) {
-        memberService.save(request);
-        return "redirect:/login";
+    public Long signup(@RequestBody MemberSignInRequest request) {
+        return memberService.save(request);
     }
 
     @GetMapping("/logout")

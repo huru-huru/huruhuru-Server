@@ -36,7 +36,9 @@ public class MemberService implements UserDetailsService {
      * @return
      */
     public Long save(MemberSignInRequest dto) {
-        return memberRepository.save(dto.toEntity(passwordEncoder.encode(dto.getPassword()))).getId();
+        MemberEntity member = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
+        System.out.println(member.getNickname());
+        return memberRepository.save(member).getId();
     }
 
     /**
