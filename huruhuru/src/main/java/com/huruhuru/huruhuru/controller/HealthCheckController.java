@@ -1,4 +1,4 @@
-package com.hruhuru.huruhuru.controller;
+package com.huruhuru.huruhuru.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

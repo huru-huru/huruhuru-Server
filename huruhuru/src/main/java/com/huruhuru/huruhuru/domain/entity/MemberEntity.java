@@ -1,6 +1,6 @@
-package com.hruhuru.huruhuru.domain.entity;
+package com.huruhuru.huruhuru.domain.entity;
 
-import com.hruhuru.huruhuru.domain.BaseTimeEntity;
+import com.huruhuru.huruhuru.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

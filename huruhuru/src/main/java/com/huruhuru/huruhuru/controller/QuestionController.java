@@ -1,6 +1,6 @@
-package com.hruhuru.huruhuru.controller;
+package com.huruhuru.huruhuru.controller;
 
-import com.hruhuru.huruhuru.service.QuestionService;
+import com.huruhuru.huruhuru.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

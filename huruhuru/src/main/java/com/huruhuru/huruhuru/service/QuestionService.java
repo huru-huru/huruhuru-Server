@@ -1,6 +1,6 @@
-package com.hruhuru.huruhuru.service;
+package com.huruhuru.huruhuru.service;
 
-import com.hruhuru.huruhuru.repository.QuestionJpaRepository;
+import com.huruhuru.huruhuru.repository.QuestionJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
