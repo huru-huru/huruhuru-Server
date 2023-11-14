@@ -15,4 +15,13 @@ public class QuestionService {
     public Long getTotalTestCount() {
         return questionJpaRepository.getTotalTestCount().orElse(0L);
     }
+
+    public void plusTotalTestCount(Long questionId) {
+        questionJpaRepository.plusTotalTestCount(questionId);
+    }
+
+    public Long getTestCountByCategoryAndTheme(Long questionId) {
+        return questionJpaRepository.getTestCountByCategoryAndTheme(questionId).orElse(0L);
+    }
+
 }
