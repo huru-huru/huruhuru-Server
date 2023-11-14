@@ -16,12 +16,15 @@ public class QuestionService {
         return questionJpaRepository.getTotalTestCount().orElse(0L);
     }
 
-    public void plusTotalTestCount(Long questionId) {
-        questionJpaRepository.plusTotalTestCount(questionId);
+
+    // 10번 질문에만 testCount += 1
+    public void plusTotalTestCount(Long category, Long theme) {
+        questionJpaRepository.plusTotalTestCount(category, theme);
     }
 
-    public Long getTestCountByCategoryAndTheme(Long questionId) {
-        return questionJpaRepository.getTestCountByCategoryAndTheme(questionId).orElse(0L);
+
+    public Long getTestCountByCategoryAndTheme(Long category, Long theme) {
+        return questionJpaRepository.getTestCountByCategoryAndTheme(category, theme).orElse(0L);
     }
 
 }

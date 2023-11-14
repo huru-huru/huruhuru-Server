@@ -15,13 +15,16 @@ public interface QuestionJpaRepository extends JpaRepository<QuestionEntity, Lon
     @Query("SELECT SUM(q.testCount) FROM QuestionEntity q")
     Optional<Long> getTotalTestCount();
 
-    // id로 question 찾아서 testCount 반환
-    @Query("SELECT SUM(q.testCount) FROM QuestionEntity q WHERE q.id = :questionId")
-    Optional<Long> getTestCountByCategoryAndTheme(@Param("questionId") Long questionId);
-
     // id로 question 찾아서 testCount 1 증가
     @Transactional
     @Modifying
-    @Query("UPDATE QuestionEntity q SET q.testCount = q.testCount + 1 WHERE q.id = :questionId")
-    void plusTotalTestCount(@Param("questionId") Long questionId);
+    @Query("UPDATE QuestionEntity q SET q.testCount = q.testCount + 1 WHERE q.category = :category AND q.theme = :theme AND q.questionNumber = 10")
+    void plusTotalTestCount(@Param("category") Long category, @Param("theme") Long theme);
+
+    // id로 question 찾아서 testCount 반환
+    @Query("SELECT SUM(q.testCount) FROM QuestionEntity q WHERE q.category = :category AND q.theme = :theme")
+    Optional<Long> getTestCountByCategoryAndTheme(@Param("category") Long category, @Param("theme") Long theme);
+
+    // category와 theme 만족하는 question 개수 반환
+    Long countByCategoryAndTheme(Long category, Long theme);
 }

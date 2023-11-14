@@ -34,6 +34,9 @@ public class QuestionEntity {
     @ColumnDefault("0")
     private Long testCount;
 
+    @Column(nullable = false)
+    private Long questionNumber;
+
     @ElementCollection
     @CollectionTable(name = "answer", joinColumns = @JoinColumn(name = "question_id"))
     private List<AnswerEntity> answerList = new ArrayList<>();
