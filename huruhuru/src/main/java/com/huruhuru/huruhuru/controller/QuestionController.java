@@ -25,10 +25,10 @@ public class QuestionController {
 
     // totalTestCount 1 증가
     @PutMapping
-    public ResponseEntity<String> plusTotalTestCount(@RequestParam("questionId") Long questionId) {
-        testService.plusTotalTestCount(questionId);
+    public ResponseEntity<String> plusTotalTestCount(@RequestParam("category") Long category, @RequestParam("theme") Long theme) {
+        testService.plusTotalTestCount(category, theme);
         // id로 testCount 조회
-        Long TestCountWithCategoryAndTheme = testService.getTestCountByCategoryAndTheme(questionId);
+        Long TestCountWithCategoryAndTheme = testService.getTestCountByCategoryAndTheme(category, theme);
         return ResponseEntity.ok("testCount 1 증가 : 현재 totalTestCount : " + TestCountWithCategoryAndTheme);
     }
 }
