@@ -1,5 +1,6 @@
 package com.huruhuru.huruhuru.service;
 
+import com.huruhuru.huruhuru.repository.MemberJpaRepository;
 import com.huruhuru.huruhuru.repository.QuestionJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
