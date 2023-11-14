@@ -1,4 +1,4 @@
-package com.hruhuru.huruhuru.domain;
+package com.huruhuru.huruhuru.domain;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
