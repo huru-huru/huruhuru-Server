@@ -34,14 +34,22 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)  // 실제 운영 환경에서는 활성화하는 걸 권장
-                .httpBasic(AbstractHttpConfigurer::disable) // HTTP 기본 인증 비활성화(사용자 이름과 비밀번호를 평문으로 전송하기 때문에 보안에 취약)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않기 때문에 STATELESS로 설정
+//                .httpBasic(AbstractHttpConfigurer::disable) // HTTP 기본 인증 비활성화(사용자 이름과 비밀번호를 평문으로 전송하기 때문에 보안에 취약)
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않기 때문에 STATELESS로 설정
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)) // 인증되지 않은 사용자의 접근에 대해 401 Unauthorized 에러를 리턴하는 클래스
+                // api 경로
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
-                        .anyRequest().authenticated()) // 인증이 필요한 경로 설정
+                        .requestMatchers(new AntPathRequestMatcher("/signup")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
+                        .anyRequest().authenticated()) // 나머지 경로는 jwt 인증 해야함
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // JWT를 통해 인증된 사용자를 식별하는 필터
                 .build();
+//        return http
+//                .csrf(AbstractHttpConfigurer::disable)  // 실제 운영 환경에서는 활성화하는 걸 권장
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers(new AntPathRequestMatcher("/signup")).permitAll()
+//                        .anyRequest().authenticated())
+//                .build();
     }
 
     // CORS 설정

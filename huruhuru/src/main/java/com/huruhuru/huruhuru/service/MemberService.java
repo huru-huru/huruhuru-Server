@@ -2,8 +2,14 @@ package com.huruhuru.huruhuru.service;
 
 import com.huruhuru.huruhuru.domain.entity.MemberEntity;
 import com.huruhuru.huruhuru.dto.request.member.MemberSignInRequest;
+import com.huruhuru.huruhuru.dto.response.member.MemberLogInResponse;
+import com.huruhuru.huruhuru.global.config.jwt.JwtTokenProvider;
 import com.huruhuru.huruhuru.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +26,8 @@ public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     /**
      * 닉네임 중복 체크(중복되면 true)
@@ -37,7 +45,6 @@ public class MemberService implements UserDetailsService {
      */
     public Long save(MemberSignInRequest dto) {
         MemberEntity member = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
-        System.out.println(member.getNickname());
         return memberRepository.save(member).getId();
     }
 
@@ -46,22 +53,43 @@ public class MemberService implements UserDetailsService {
      * @param dto
      * @return
      */
-    public MemberEntity login(MemberSignInRequest dto) {
+    public MemberLogInResponse login(MemberSignInRequest dto) {
         Optional<MemberEntity> optionalMember = memberRepository.findByNickname(dto.getNickname());
+        System.out.println("optionalMember: " + optionalMember);
 
-        // nickname이 일치하는 Member가 없으면 null 반환
+        // nickname이 일치하는 Member가 없는 경우
         if (optionalMember.isEmpty()) {
+            System.out.println("optionalMember.isEmpty()");
             return null;
         }
 
         MemberEntity member = optionalMember.get();
+        System.out.println("password: " + member.getPassword());
 
         // password가 일치하지 않으면 null 반환
-        if (!member.getPassword().equals(dto.getPassword())) {
+        if(!passwordEncoder.matches(dto.getPassword(), member.getPassword())) {
+            System.out.println("!passwordEncoder.matches(dto.getPassword(), member.getPassword())");
             return null;
         }
 
-        return member;
+        System.out.println("password 일치");
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(dto.getNickname(), dto.getPassword());
+
+        System.out.println("authenticationToken: " + authenticationToken);
+
+        // authenticationToken 객체를 통해 Authentication 객체 생성
+        // 이 과정에서 CustomUserDetailsService 에서 우리가 재정의한 loadUserByUsername 메서드 호출
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        System.out.println("authentication: " + authentication);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String accessToken = jwtTokenProvider.generateToken(authentication, 60*60*1000L);
+        System.out.println("최종 accessToken: " + accessToken);
+        return new MemberLogInResponse(accessToken);
     }
 
 
@@ -80,10 +108,12 @@ public class MemberService implements UserDetailsService {
      * @return
      */
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String nickname) throws UsernameNotFoundException {
         MemberEntity member = memberRepository.findByNickname(nickname)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 유저를 찾을 수 없습니다."));
 
+        System.out.println("loadUserByUsername 유저 찾음: " + member);
         return member;
     }
 }

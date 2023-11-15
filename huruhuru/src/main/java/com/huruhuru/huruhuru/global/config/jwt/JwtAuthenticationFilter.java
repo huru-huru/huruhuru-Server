@@ -26,12 +26,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        System.out.println("doFilterInternal 실행됨");
         try {
             final String token = getTokenFromJwt(request);  // HTTP 요청에서 JWT 토큰 추출
+            System.out.println("token: " + token);
 
             // JWT 토큰 유효성 검사
             if (jwtTokenProvider.validateToken(token) == JwtValidationType.VALID_JWT) {
                 Long memberId = jwtTokenProvider.getUserFromJwt(token);
+                System.out.println("memberId: " + memberId);
 
                 // 사용자 인증 객체 생성
                 UserAuthentication authentication = new UserAuthentication(memberId.toString(), null, null);
@@ -41,10 +44,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 // SecurityContextHolder에 인증 객체 설정
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                System.out.println("Security Context에 인증 정보를 저장했습니다");
             }
         } catch(Exception exception){
+            System.out.println("exception: " + exception);
 //            throw new BusinessException("Invalid Token");
         }
+
+        // 다음 필터로 넘어감
+        filterChain.doFilter(request, response);
     }
 
     private String getTokenFromJwt(HttpServletRequest request) {

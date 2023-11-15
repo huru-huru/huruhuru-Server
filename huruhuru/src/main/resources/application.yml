@@ -20,3 +20,8 @@ spring:
 
 jwt:
   secret: service-fit-secret-key
+
+#logging:
+#  level:
+#    org:
+#      springframework: debug
