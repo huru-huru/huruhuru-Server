@@ -32,7 +32,7 @@ public class MemberController {
         MemberRankingGetResponse member = memberService.getMemberRankingById(memberId);
         Map<String, Object> response = new HashMap<>();
         response.put("Top10", memberRanking);
-        response.put("MyRanking : ", member);
+        response.put("MyRanking", member);
         return ResponseEntity.ok(response);
     }
 }
