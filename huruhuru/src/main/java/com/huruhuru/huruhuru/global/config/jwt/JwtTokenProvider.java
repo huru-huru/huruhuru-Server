@@ -1,5 +1,6 @@
 package com.huruhuru.huruhuru.global.config.jwt;
 
+import com.huruhuru.huruhuru.domain.entity.MemberEntity;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -12,6 +13,7 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -35,7 +37,11 @@ public class JwtTokenProvider {
         final Claims claims = Jwts.claims()
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + expiredTokenTime));
-        claims.put("id", authentication.getPrincipal());    // 사용자의 id를 Claim에 저장
+
+        // 사용자의 id를 Claim에 저장
+        MemberEntity memberEntity = (MemberEntity) authentication.getPrincipal();
+        Long id = memberEntity.getId();
+        claims.put("id", id);
 
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)

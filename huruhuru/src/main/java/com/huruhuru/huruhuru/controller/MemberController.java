@@ -31,7 +31,6 @@ public class MemberController {
      */
 
     @PostMapping("signup")
-    @PreAuthorize("permitAll()")
     public ResponseEntity<Map<String, Object>> signup(@RequestBody MemberSignInRequest request) {
         Long id = memberService.save(request);
         Map<String, Object> response = new HashMap<>();
@@ -65,6 +64,7 @@ public class MemberController {
     // 4. 1위부터 10위까지 순서대로 멤버의 nickname, test_count, member의 best_score 합산 반환
     // 5. 멤버 id 값으로 받은 멤버의 순위를 반환
     @GetMapping("score/{memberId}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Map<String, Object>> getRanking(@PathVariable("memberId") Long memberId){
         List<MemberEntity> memberRanking = memberService.getAllSortedMembers();
         MemberRankingGetResponse member = memberService.getMemberRankingById(memberId);

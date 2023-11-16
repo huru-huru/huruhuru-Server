@@ -33,7 +33,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // JWT 토큰 유효성 검사
             if (jwtTokenProvider.validateToken(token) == JwtValidationType.VALID_JWT) {
                 Long memberId = jwtTokenProvider.getUserFromJwt(token);
-                System.out.println("memberId: " + memberId);
 
                 // 사용자 인증 객체 생성
                 UserAuthentication authentication = new UserAuthentication(memberId.toString(), null, null);
