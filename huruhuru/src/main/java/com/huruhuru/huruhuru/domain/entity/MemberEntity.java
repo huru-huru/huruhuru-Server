@@ -1,14 +1,19 @@
 package com.huruhuru.huruhuru.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huruhuru.huruhuru.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,7 +32,21 @@ public class MemberEntity extends BaseTimeEntity implements UserDetails {
     private String nickname;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
+
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<ScoreEntity> scoreList = new ArrayList<>();
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private Long testCount;
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private Long totalBestScore;
+
 
     @Builder
     public MemberEntity(String nickname, String password) {
