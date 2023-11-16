@@ -20,7 +20,7 @@ import java.util.Collection;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "members")
+@Table(name = "member")
 public class MemberEntity extends BaseTimeEntity implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
