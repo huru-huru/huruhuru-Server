@@ -22,5 +22,5 @@ public class ScoreEntity {
 
     @Column(nullable = false)
     @ColumnDefault("0")
-    private Long best_score;
+    private Long bestScore;
 }
