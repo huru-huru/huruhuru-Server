@@ -22,8 +22,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private static final String[] AUTH_WHITE_LIST = {"/api/auth/**"};
-
     private final CustomJwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -32,8 +30,13 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)  // 실제 운영 환경에서는 활성화하는 걸 권장
                 .httpBasic(AbstractHttpConfigurer::disable) // HTTP 기본 인증 비활성화(사용자 이름과 비밀번호를 평문으로 전송하기 때문에 보안에 취약)
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않기 때문에 STATELESS로 설정
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)) // 인증되지 않은 사용자의 접근에 대해 401 Unauthorized 에러를 리턴하는 클래스
+
+                // 세션을 사용하지 않기 때문에 STATELESS로 설정
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // 인증되지 않은 사용자의 접근에 대해 401 Unauthorized 에러를 리턴하는 클래스
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+
                 // api 경로
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(new AntPathRequestMatcher("/signup")).permitAll()

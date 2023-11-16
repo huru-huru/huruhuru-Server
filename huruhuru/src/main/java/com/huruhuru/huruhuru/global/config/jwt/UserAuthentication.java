@@ -15,7 +15,6 @@ public class UserAuthentication extends UsernamePasswordAuthenticationToken {
     public UserAuthentication(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
         // principal: 사용자의 식별자(사용자 ID 등)
         // credentials: 사용자의 비밀번호. JWT에서는 주로 null이 될 수 있음.
-        // authorities: 사용자의 권한 목록
         super(principal, credentials, authorities);
     }
 

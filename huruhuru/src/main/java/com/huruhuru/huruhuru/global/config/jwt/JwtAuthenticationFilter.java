@@ -1,5 +1,6 @@
 package com.huruhuru.huruhuru.global.config.jwt;
 
+import com.huruhuru.huruhuru.global.exception.InvalidTokenException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,10 +27,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        System.out.println("doFilterInternal 실행됨");
         try {
             final String token = getTokenFromJwt(request);  // HTTP 요청에서 JWT 토큰 추출
-            System.out.println("token: " + token);
 
             // JWT 토큰 유효성 검사
             if (jwtTokenProvider.validateToken(token) == JwtValidationType.VALID_JWT) {
@@ -44,14 +43,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 // SecurityContextHolder에 인증 객체 설정
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                System.out.println("Security Context에 인증 정보를 저장했습니다");
             }
         } catch(Exception exception){
-            System.out.println("exception: " + exception);
-//            throw new BusinessException("Invalid Token");
+            throw new InvalidTokenException("유효한 JWT 토큰이 없습니다");
         }
 
-        // 다음 필터로 넘어감
         filterChain.doFilter(request, response);
     }
 

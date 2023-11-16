@@ -25,9 +25,6 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        // JWT_SECRET 값을 Base64로 인코딩하는 메서드.
-        // base64 라이브러리에서 제공하는 인코더를 사용하여 JWT_SECRET 값을 인코딩
-        // encodeToString을 사용하여 byte[]를 String으로 변환
         JWT_SECRET = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -36,11 +33,10 @@ public class JwtTokenProvider {
 
         // Claim: JWT 토큰에 저장되는 정보
         final Claims claims = Jwts.claims()
-                .setIssuedAt(now)       // 발급 시간을 지금으로 설정
-                .setExpiration(new Date(now.getTime() + expiredTokenTime));     // 만료 시간 설정
-        claims.put("id", authentication.getPrincipal());        // 사용자의 id를 Claim에 저장
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + expiredTokenTime));
+        claims.put("id", authentication.getPrincipal());    // 사용자의 id를 Claim에 저장
 
-        // JWT는 Header, Claim(payload), Signature 세 부분으로 구성되어 있음.
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setClaims(claims)
@@ -50,7 +46,7 @@ public class JwtTokenProvider {
 
     private SecretKey getSigningKey() { // 서명 키를 생성하는 메서드.
         String encodedKey= Base64.getEncoder().encodeToString(JWT_SECRET.getBytes());
-        return Keys.hmacShaKeyFor(encodedKey.getBytes());   // HMAC SHA 알고리즘으로 SecretKey를 생성
+        return Keys.hmacShaKeyFor(encodedKey.getBytes());
     }
 
     public JwtValidationType validateToken(String token) {

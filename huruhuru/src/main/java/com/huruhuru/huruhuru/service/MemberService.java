@@ -5,13 +5,13 @@ import com.huruhuru.huruhuru.dto.response.member.MemberRankingGetResponse;
 import com.huruhuru.huruhuru.global.exception.MemberException;
 import com.huruhuru.huruhuru.repository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import com.huruhuru.huruhuru.dto.request.member.MemberSignInRequest;
-import com.huruhuru.huruhuru.dto.response.member.MemberLogInResponse;
 import com.huruhuru.huruhuru.global.config.jwt.JwtTokenProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -59,34 +59,31 @@ public class MemberService implements UserDetailsService {
      * @param dto
      * @return
      */
-    public MemberLogInResponse login(MemberSignInRequest dto) {
+    public String login(MemberSignInRequest dto) {
         Optional<MemberEntity> optionalMember = memberJpaRepository.findByNickname(dto.getNickname());
 
         // nickname이 일치하는 Member가 없는 경우
         if (optionalMember.isEmpty()) {
-            return null;
+            throw new AuthenticationException("닉네임이 존재하지 않습니다.") {};
         }
 
         MemberEntity member = optionalMember.get();
-        System.out.println("password: " + member.getPassword());
 
         // password가 일치하지 않으면 null 반환
         if(!passwordEncoder.matches(dto.getPassword(), member.getPassword())) {
-            return null;
+            throw new AuthenticationException("비밀번호가 일치하지 않습니다.") {};
+
         }
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(dto.getNickname(), dto.getPassword());
-
-        System.out.println("authenticationToken: " + authenticationToken);
 
         // authenticationToken 객체를 통해 Authentication 객체 생성
         // 이 과정에서 CustomUserDetailsService 에서 우리가 재정의한 loadUserByUsername 메서드 호출
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String accessToken = jwtTokenProvider.generateToken(authentication, 60*60*1000L);
-        return new MemberLogInResponse(accessToken);
+        return jwtTokenProvider.generateToken(authentication, 60*60*1000L);
     }
 
 
