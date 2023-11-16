@@ -1,7 +1,6 @@
 package com.huruhuru.huruhuru.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.huruhuru.huruhuru.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -39,4 +38,5 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(nullable = false)
     @ColumnDefault("0")
     private Long totalBestScore;
+
 }

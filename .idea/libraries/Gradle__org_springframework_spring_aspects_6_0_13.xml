@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework:spring-aspects:6.0.13" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework" artifactId="spring-aspects" version="6.0.13" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-aspects/6.0.13/59b1d3f507f5ed2e4ef357541c464925831bea9b/spring-aspects-6.0.13.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-aspects/6.0.13/5bbc8a5f48e277ee27365e6a29ad96792ee0872f/spring-aspects-6.0.13-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
