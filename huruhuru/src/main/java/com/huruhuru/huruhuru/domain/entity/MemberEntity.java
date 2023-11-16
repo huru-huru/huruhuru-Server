@@ -16,12 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "member")
+@Table(name = "members")
 public class MemberEntity extends BaseTimeEntity implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,9 +48,11 @@ public class MemberEntity extends BaseTimeEntity implements UserDetails {
 
 
     @Builder
-    public MemberEntity(String nickname, String password) {
+    public MemberEntity(String nickname, String password, Long testCount, Long totalBestScore) {
         this.nickname = nickname;
         this.password = password;
+        this.testCount = testCount;
+        this.totalBestScore = totalBestScore;
     }
 
     /*

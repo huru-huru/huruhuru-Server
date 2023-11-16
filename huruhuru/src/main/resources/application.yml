@@ -12,7 +12,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      hibernate.hbm2ddl.auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true

@@ -8,7 +8,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @NoArgsConstructor
 @Getter
-@Table(name = "score")
+@Table(name = "scores")
 public class ScoreEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

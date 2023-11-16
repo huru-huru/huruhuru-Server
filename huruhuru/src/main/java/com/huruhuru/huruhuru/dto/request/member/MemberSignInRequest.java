@@ -2,12 +2,13 @@ package com.huruhuru.huruhuru.dto.request.member;
 
 import com.huruhuru.huruhuru.domain.entity.MemberEntity;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter @Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class MemberSignInRequest {
 
     @NotBlank(message = "닉네임을 입력해주세요.")
@@ -20,6 +21,8 @@ public class MemberSignInRequest {
         return MemberEntity.builder()
                 .nickname(this.nickname)
                 .password(encodedPassword)
+                .testCount(0L)
+                .totalBestScore(0L)
                 .build();
     }
 
