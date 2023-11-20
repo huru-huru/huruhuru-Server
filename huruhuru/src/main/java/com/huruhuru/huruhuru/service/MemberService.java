@@ -9,9 +9,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 
-import com.huruhuru.huruhuru.dto.request.member.MemberSignInRequest;
+import com.huruhuru.huruhuru.dto.request.member.MemberAuthRequest;
 import com.huruhuru.huruhuru.global.config.jwt.JwtTokenProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -36,30 +38,17 @@ public class MemberService implements UserDetailsService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     /**
-     * 닉네임 중복 체크(중복되면 true)
-     * @param nickname
-     * @return
-     */
-    public boolean checkNicknameDuplicate(String nickname) {
-        return memberJpaRepository.existsByNickname(nickname);
-    }
-
-    /**
      * 회원가입
-     * @param dto
-     * @return
      */
-    public Long save(MemberSignInRequest dto) {
+    public Long save(MemberAuthRequest dto) {
         MemberEntity member = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
         return memberJpaRepository.save(member).getId();
     }
 
     /**
      * 로그인
-     * @param dto
-     * @return
      */
-    public String login(MemberSignInRequest dto) {
+    public Map<String, Object> login(MemberAuthRequest dto) {
         Optional<MemberEntity> optionalMember = memberJpaRepository.findByNickname(dto.getNickname());
 
         // nickname이 일치하는 Member가 없는 경우
@@ -83,7 +72,12 @@ public class MemberService implements UserDetailsService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return jwtTokenProvider.generateToken(authentication, 60*60*1000L); // 토큰 유효시간: 1시간
+        String token = jwtTokenProvider.generateToken(authentication);
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("token", token);
+        body.put("id", member.getId());
+        return body;
     }
 
 
