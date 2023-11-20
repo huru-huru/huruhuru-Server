@@ -53,14 +53,14 @@ public class MemberService implements UserDetailsService {
 
         // nickname이 일치하는 Member가 없는 경우
         if (optionalMember.isEmpty()) {
-            throw new AuthenticationException("닉네임이 존재하지 않습니다.") {};
+            throw new AuthenticationException("닉네임 또는 비밀번호가 일치하지 않습니다.") {};
         }
 
         MemberEntity member = optionalMember.get();
 
         // password가 일치하지 않으면 null 반환
         if(!passwordEncoder.matches(dto.getPassword(), member.getPassword())) {
-            throw new AuthenticationException("비밀번호가 일치하지 않습니다.") {};
+            throw new AuthenticationException("닉네임 또는 비밀번호가 일치하지 않습니다.") {};
 
         }
 
