@@ -1,5 +1,6 @@
 package com.huruhuru.huruhuru.domain.entity;
 
+import com.huruhuru.huruhuru.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 @NoArgsConstructor
 @Getter
 @Table(name = "score")
-public class ScoreEntity {
+public class ScoreEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

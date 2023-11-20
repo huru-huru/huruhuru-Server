@@ -1,13 +1,16 @@
 package com.huruhuru.huruhuru.repository;
 
 import com.huruhuru.huruhuru.domain.entity.MemberEntity;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberJpaRepository extends JpaRepository<MemberEntity, Long> {
+
+    boolean existsByNickname(String nickname);
+    Optional<MemberEntity> findByNickname(String nickname);
 
     @Query("SELECT m FROM MemberEntity m JOIN m.scoreList s " +
             "GROUP BY m.id " +

@@ -12,8 +12,16 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      hibernate.hbm2ddl.auto: update
     properties:
       hibernate:
+        hibernate.hbm2ddl.auto: update
         format_sql: true
     show_sql: true
+
+jwt:
+  secret: service-fit-secret-key
+
+#logging:
+#  level:
+#    org:
+#      springframework: debug
