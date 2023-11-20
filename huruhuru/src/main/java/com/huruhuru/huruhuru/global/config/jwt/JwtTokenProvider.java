@@ -30,13 +30,10 @@ public class JwtTokenProvider {
         JWT_SECRET = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(Authentication authentication, Long expiredTokenTime) {
-        final Date now = new Date();
-
+    public String generateToken(Authentication authentication) {
         // Claim: JWT 토큰에 저장되는 정보
         final Claims claims = Jwts.claims()
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + expiredTokenTime));
+                .setIssuedAt(new Date());
 
         // 사용자의 id를 Claim에 저장
         MemberEntity memberEntity = (MemberEntity) authentication.getPrincipal();
@@ -62,8 +59,6 @@ public class JwtTokenProvider {
             return JwtValidationType.VALID_JWT;
         } catch (MalformedJwtException ex) {
             return JwtValidationType.INVALID_JWT_TOKEN;
-        } catch (ExpiredJwtException ex) {
-            return JwtValidationType.EXPIRED_JWT_TOKEN;
         } catch (UnsupportedJwtException ex) {
             return JwtValidationType.UNSUPPORTED_JWT_TOKEN;
         } catch (IllegalArgumentException ex) {
