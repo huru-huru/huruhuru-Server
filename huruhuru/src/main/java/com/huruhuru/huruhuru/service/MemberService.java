@@ -83,8 +83,6 @@ public class MemberService implements UserDetailsService {
 
     /**
      * ID로 회원 조회
-     * @param id
-     * @return
      */
     public MemberEntity getMember(Long id) {
         return memberJpaRepository.findById(id).orElse(null);
@@ -92,8 +90,6 @@ public class MemberService implements UserDetailsService {
 
     /**
      * 닉네임으로 회원 조회
-     * @param nickname
-     * @return
      */
     @Override
     @Transactional

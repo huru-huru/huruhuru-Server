@@ -63,6 +63,9 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO: 특정 사용자 정보를 조회하는 API
-
+    @GetMapping("{memberId}")
+    public ResponseEntity<MemberEntity> getMember(@PathVariable("memberId") Long memberId) {
+        MemberEntity member = memberService.getMember(memberId);
+        return ResponseEntity.ok(member);
+    }
 }
