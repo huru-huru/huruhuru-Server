@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,9 +59,10 @@ public class QuestionController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<String> saveScore(@RequestBody ScoreRequest scoreRequest,Authentication authentication) {
-        Long memberId = memberService.getCurrentMemberId();
-        log.info(String.valueOf(memberId));
+    public ResponseEntity<String> saveScore(@RequestBody ScoreRequest scoreRequest) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userdetail= (String)principal;
+        Long memberId=Long.parseLong(userdetail);
         testService.saveQuestionAndScore(memberId, scoreRequest.getTheme(), scoreRequest.getScore());
         return ResponseEntity.ok("Score saved successfully.");
     }

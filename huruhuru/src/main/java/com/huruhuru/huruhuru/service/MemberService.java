@@ -130,18 +130,5 @@ public class MemberService implements UserDetailsService {
         throw new MemberException.MemberNotFoundException("Member with id " + memberId + " not found");
     }
 
-    public Long getCurrentMemberId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.isAuthenticated()) {
-            Object principal = authentication.getPrincipal();
-
-            if (principal instanceof CustomUserDetail) {
-                return ((CustomUserDetail) principal).getMemberId();
-            }
-        }
-
-        return null;
-    }
 
 }

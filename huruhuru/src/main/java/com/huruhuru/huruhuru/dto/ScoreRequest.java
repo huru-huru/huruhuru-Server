@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ScoreRequest {
-    private Long id;
     private Long theme;
     private Long score;
 
