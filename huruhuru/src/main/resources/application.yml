@@ -1,20 +1,26 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/huruhuru
-    username: sa
-    password:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://${database-host}:3306/huruhuru?createDatabaseIfNotExist=true
+      username: huruhuru
+      password: ${database-password}
+#    url: jdbc:h2:tcp://localhost/~/huruhuru
+#    username: sa
+#    password:
 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
         #        show_sql: true
         format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 #  jpa:
 #    open-in-view: true
@@ -27,6 +33,9 @@ spring:
 
 jwt:
   secret: service-fit-secret-key
+
+logging.level:
+  org.hibernate.SQL: debug
 
 #logging:
 #  level:
