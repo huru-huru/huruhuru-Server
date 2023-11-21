@@ -2,6 +2,7 @@ package com.huruhuru.huruhuru.domain.entity;
 
 import com.huruhuru.huruhuru.domain.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -24,4 +25,16 @@ public class ScoreEntity extends BaseTimeEntity {
     @Column(nullable = false)
     @ColumnDefault("0")
     private Long bestScore;
+
+    public void saveBestScore(Long bestScore) {
+        this.bestScore = bestScore;
+    }
+
+    @Builder
+    public ScoreEntity(MemberEntity member, Long theme,Long bestScore) {
+        this.member = member;
+        this.theme = theme;
+        this.bestScore = bestScore;
+    }
+
 }

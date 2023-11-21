@@ -2,6 +2,7 @@ package com.huruhuru.huruhuru.service;
 
 import com.huruhuru.huruhuru.domain.entity.MemberEntity;
 import com.huruhuru.huruhuru.dto.response.member.MemberRankingGetResponse;
+import com.huruhuru.huruhuru.global.CustomUserDetail;
 import com.huruhuru.huruhuru.global.exception.MemberException;
 import com.huruhuru.huruhuru.repository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -128,4 +129,6 @@ public class MemberService implements UserDetailsService {
         }
         throw new MemberException.MemberNotFoundException("Member with id " + memberId + " not found");
     }
+
+
 }

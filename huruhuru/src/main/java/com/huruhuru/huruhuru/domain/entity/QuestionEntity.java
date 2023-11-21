@@ -1,5 +1,6 @@
 package com.huruhuru.huruhuru.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huruhuru.huruhuru.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -38,8 +39,8 @@ public class QuestionEntity extends BaseTimeEntity {
     @Column(nullable = false)
     private Long questionNumber;
 
-    @ElementCollection
-    @CollectionTable(name = "answer", joinColumns = @JoinColumn(name = "question_id"))
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "question")
     private List<AnswerEntity> answerList = new ArrayList<>();
 
 }
