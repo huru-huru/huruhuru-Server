@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(new AntPathRequestMatcher("/signup")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+//                        .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
 //                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/test")).permitAll()
                         .anyRequest().authenticated()) // 나머지 경로는 jwt 인증 해야함
