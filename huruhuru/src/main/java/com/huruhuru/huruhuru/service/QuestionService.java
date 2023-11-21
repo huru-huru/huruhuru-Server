@@ -45,6 +45,7 @@ public class QuestionService {
         return questionJpaRepository.findByCategoryAndTheme(category, theme);
     }
 
+
     @Transactional
     public void saveQuestionAndScore(Long memberId, Long theme, Long score) {
         // 1. 현재 로그인한 회원 조회
