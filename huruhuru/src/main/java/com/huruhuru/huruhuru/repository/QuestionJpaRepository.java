@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface QuestionJpaRepository extends JpaRepository<QuestionEntity, Long> {
@@ -25,4 +26,5 @@ public interface QuestionJpaRepository extends JpaRepository<QuestionEntity, Lon
     @Query("SELECT SUM(q.testCount) FROM QuestionEntity q WHERE q.category = :category AND q.theme = :theme")
     Optional<Long> getTestCountByCategoryAndTheme(@Param("category") Long category, @Param("theme") Long theme);
 
+    List<QuestionEntity> findByCategoryAndTheme(Long category, Long theme);
 }

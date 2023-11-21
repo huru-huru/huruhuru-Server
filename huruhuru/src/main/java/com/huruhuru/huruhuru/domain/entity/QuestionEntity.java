@@ -42,4 +42,6 @@ public class QuestionEntity extends BaseTimeEntity {
     @CollectionTable(name = "answer", joinColumns = @JoinColumn(name = "question_id"))
     private List<AnswerEntity> answerList = new ArrayList<>();
 
+
+
 }

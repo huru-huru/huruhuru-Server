@@ -1,26 +1,39 @@
 package com.huruhuru.huruhuru.controller;
 
+import com.huruhuru.huruhuru.domain.entity.MemberEntity;
+import com.huruhuru.huruhuru.domain.entity.QuestionEntity;
+import com.huruhuru.huruhuru.dto.ScoreRequest;
+import com.huruhuru.huruhuru.repository.MemberJpaRepository;
+import com.huruhuru.huruhuru.repository.QuestionJpaRepository;
+import com.huruhuru.huruhuru.service.MemberService;
 import com.huruhuru.huruhuru.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.*;
+import java.lang.reflect.Member;
+import java.util.List;
+import java.util.Optional;
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequestMapping(value = "/")
 @RequiredArgsConstructor
 public class QuestionController {
+    private final MemberJpaRepository memberJpaRepository;
 
     private final QuestionService testService;
+
+    private final MemberService memberService;
 
     // totalTestCount 조회
     @GetMapping
@@ -40,4 +53,21 @@ public class QuestionController {
         return ResponseEntity.ok(response);
 
     }
+
+
+    @GetMapping("/test")
+    public ResponseEntity<List<QuestionEntity>> getQuestionsByCategoryAndTheme(@RequestParam("category") Long category, @RequestParam("theme") Long theme) {
+        List<QuestionEntity> questionEntities = testService.getQuestionsByCategoryAndTheme(category, theme);
+        return new ResponseEntity<>(questionEntities, HttpStatus.OK);
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<String> saveScore(@RequestBody ScoreRequest scoreRequest) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userdetail= (String)principal;
+        Long memberId=Long.parseLong(userdetail);
+        testService.saveQuestionAndScore(memberId, scoreRequest.getTheme(), scoreRequest.getScore());
+        return ResponseEntity.ok("Score saved successfully.");
+    }
+
 }
