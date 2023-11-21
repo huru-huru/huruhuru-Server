@@ -19,10 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -44,11 +44,14 @@ public class QuestionController {
 
     // totalTestCount 1 증가
     @PutMapping
-    public ResponseEntity<String> plusTotalTestCount(@RequestParam("category") Long category, @RequestParam("theme") Long theme) {
+    public ResponseEntity<Map<String, Long>> plusTotalTestCount(@RequestParam("category") Long category, @RequestParam("theme") Long theme) {
         testService.plusTotalTestCount(category, theme);
         // id로 testCount 조회
         Long TestCountWithCategoryAndTheme = testService.getTestCountByCategoryAndTheme(category, theme);
-        return ResponseEntity.ok("testCount 1 증가 : 현재 totalTestCount : " + TestCountWithCategoryAndTheme);
+
+        Map<String, Long> response = Map.of("testCount", TestCountWithCategoryAndTheme);
+        return ResponseEntity.ok(response);
+
     }
 
 

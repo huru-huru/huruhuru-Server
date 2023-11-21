@@ -1,12 +1,13 @@
 package com.huruhuru.huruhuru.global.exception;
 
 import com.huruhuru.huruhuru.dto.ErrorResponse;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
+
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,5 +24,4 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(ex.getMessage()));
     }
-
 }
