@@ -33,6 +33,9 @@ public class QuestionEntity extends BaseTimeEntity {
     private String image;
 
     @Column(nullable = false)
+    private String image_url;
+
+    @Column(nullable = false)
     @ColumnDefault("0")
     private Long testCount;
 
