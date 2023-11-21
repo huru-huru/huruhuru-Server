@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         String message = "이미 존재하는 닉네임입니다.";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new ErrorResponse(message));
     }
 

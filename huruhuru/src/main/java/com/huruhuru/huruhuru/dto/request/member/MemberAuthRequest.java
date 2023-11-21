@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class MemberSignInRequest {
+public class MemberAuthRequest {
 
     @NotBlank(message = "닉네임을 입력해주세요.")
     private String nickname;
