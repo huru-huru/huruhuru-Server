@@ -56,8 +56,18 @@ public class QuestionController {
 
 
     @GetMapping("/test")
-    public ResponseEntity<List<QuestionEntity>> getQuestionsByCategoryAndTheme(@RequestParam("category") Long category, @RequestParam("theme") Long theme) {
+    public ResponseEntity<List<QuestionEntity>> getQuestionsByCategoryAndTheme(
+            @RequestParam("category") Long category,
+            @RequestParam("theme") Long theme) {
+
+        log.info("Request received for questions by category and theme");
+
         List<QuestionEntity> questionEntities = testService.getQuestionsByCategoryAndTheme(category, theme);
+
+        if (questionEntities.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         return new ResponseEntity<>(questionEntities, HttpStatus.OK);
     }
 
