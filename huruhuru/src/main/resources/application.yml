@@ -1,4 +1,9 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://${database-host}:3306/huruhuru?createDatabaseIfNotExist=true
@@ -36,6 +41,19 @@ jwt:
 
 logging.level:
   org.hibernate.SQL: debug
+
+cloud:
+  aws:
+    s3:
+      bucket: huruhuru
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+#    credentials:
+#      access-key:
+#      secret-key:
+
 
 #logging:
 #  level:
