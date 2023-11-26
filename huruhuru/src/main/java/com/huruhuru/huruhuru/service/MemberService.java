@@ -30,7 +30,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class MemberService implements UserDetailsService {
 
     private final MemberJpaRepository memberJpaRepository;

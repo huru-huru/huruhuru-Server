@@ -18,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -45,6 +46,7 @@ public class SecurityConfig {
 //                        .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
 //                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/test")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/upload")).permitAll()
                         .anyRequest().authenticated()) // 나머지 경로는 jwt 인증 해야함
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // JWT를 통해 인증된 사용자를 식별하는 필터
                 .build();
