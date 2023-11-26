@@ -8,6 +8,7 @@ import com.huruhuru.huruhuru.repository.QuestionJpaRepository;
 import com.huruhuru.huruhuru.repository.ScoreJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +43,8 @@ public class QuestionService {
     }
 
     public List<QuestionEntity> getQuestionsByCategoryAndTheme(Long category, Long theme) {
-        return questionJpaRepository.findByCategoryAndTheme(category, theme);
+        Sort sort = Sort.by(Sort.Order.asc("questionNumber"));
+        return questionJpaRepository.findByCategoryAndTheme(category, theme, sort);
     }
 
 

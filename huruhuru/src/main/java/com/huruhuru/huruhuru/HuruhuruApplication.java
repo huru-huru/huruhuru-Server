@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
-//@SpringBootApplication
 public class HuruhuruApplication {
 //	static {
 //		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");

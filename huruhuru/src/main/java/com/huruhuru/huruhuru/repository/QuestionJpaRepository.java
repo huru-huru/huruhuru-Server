@@ -1,6 +1,7 @@
 package com.huruhuru.huruhuru.repository;
 
 import com.huruhuru.huruhuru.domain.entity.QuestionEntity;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,5 +27,6 @@ public interface QuestionJpaRepository extends JpaRepository<QuestionEntity, Lon
     @Query("SELECT SUM(q.testCount) FROM QuestionEntity q WHERE q.category = :category AND q.theme = :theme")
     Optional<Long> getTestCountByCategoryAndTheme(@Param("category") Long category, @Param("theme") Long theme);
 
-    List<QuestionEntity> findByCategoryAndTheme(Long category, Long theme);
+    List<QuestionEntity> findByCategoryAndTheme(Long category, Long theme, Sort sort);
+
 }

@@ -1,9 +1,8 @@
 package com.huruhuru.huruhuru.controller;
 
-import com.huruhuru.huruhuru.dto.request.member.MemberSignInRequest;
+import com.huruhuru.huruhuru.dto.request.member.MemberAuthRequest;
 import com.huruhuru.huruhuru.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +30,7 @@ public class MemberController {
      */
 
     @PostMapping("signup")
-    public ResponseEntity<Map<String, Object>> signup(@RequestBody MemberSignInRequest request) {
+    public ResponseEntity<Map<String, Object>> signup(@RequestBody MemberAuthRequest request) {
         Long id = memberService.save(request);
         Map<String, Object> response = new HashMap<>();
         response.put("id", id);
@@ -39,19 +38,10 @@ public class MemberController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody MemberSignInRequest request) {
-        String token = memberService.login(request);
-        Map<String, Object> response = new HashMap<>();
-        response.put("token", token);
+    public ResponseEntity<Map<String, Object>> login(@RequestBody MemberAuthRequest request) {
+        Map<String, Object> response = memberService.login(request);
         return ResponseEntity.ok(response);
     }
-
-//    @GetMapping("logout")
-//    public String logout(HttpServletRequest request, HttpServletResponse response) {
-//        new SecurityContextLogoutHandler().logout(request, response,
-//                SecurityContextHolder.getContext().getAuthentication());
-//        return "redirect:/";
-//    }
 
 
     /*
@@ -73,6 +63,9 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO: 특정 사용자 정보를 조회하는 API
-
+    @GetMapping("{memberId}")
+    public ResponseEntity<MemberEntity> getMember(@PathVariable("memberId") Long memberId) {
+        MemberEntity member = memberService.getMember(memberId);
+        return ResponseEntity.ok(member);
+    }
 }
