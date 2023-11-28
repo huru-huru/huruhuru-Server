@@ -29,27 +29,48 @@ public class SecurityConfig {
 
     @Bean   // 특정 HTTP 요청에 대한 웹 기반 보안 구성. (인증인가, 로그인, 로그아웃 설정)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(AbstractHttpConfigurer::disable)  // 실제 운영 환경에서는 활성화하는 걸 권장
-                .httpBasic(AbstractHttpConfigurer::disable) // HTTP 기본 인증 비활성화(사용자 이름과 비밀번호를 평문으로 전송하기 때문에 보안에 취약)
+        http.cors().and()
+                .csrf().disable() // 실제 운영 환경에서는 활성화하는 걸 권장
+                .httpBasic().disable() // HTTP 기본 인증 비활성화(사용자 이름과 비밀번호를 평문으로 전송하기 때문에 보안에 취약)
 
                 // 세션을 사용하지 않기 때문에 STATELESS로 설정
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
 
                 // 인증되지 않은 사용자의 접근에 대해 401 Unauthorized 에러를 리턴하는 클래스
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and()
+                .authorizeRequests()
+                .requestMatchers(new AntPathRequestMatcher("/signup")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/test")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/upload")).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-                // api 경로
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/signup")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers(new AntPathRequestMatcher("/test")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/upload")).permitAll()
-                        .anyRequest().authenticated()) // 나머지 경로는 jwt 인증 해야함
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // JWT를 통해 인증된 사용자를 식별하는 필터
-                .build();
+        return http.build();
+
+
+
+//        return http
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .httpBasic(AbstractHttpConfigurer::disable)
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+//
+//                // api 경로
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers(new AntPathRequestMatcher("/signup")).permitAll()
+//                        .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
+//                        .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+////                        .requestMatchers("/admin/**").hasRole("ADMIN")
+//                        .requestMatchers(new AntPathRequestMatcher("/test")).permitAll()
+//                        .requestMatchers(new AntPathRequestMatcher("/upload")).permitAll()
+//                        .anyRequest().authenticated()) // 나머지 경로는 jwt 인증 해야함
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // JWT를 통해 인증된 사용자를 식별하는 필터
+//                .build();
     }
 
     // CORS 설정
@@ -59,7 +80,7 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://huruhuru.netlify.app", "http://localhost:3000")
+                        .allowedOrigins("https://huruhuru.netlify.app", "http://localhost:3000", "https://huruhuru.kro.kr")
                         .allowedOriginPatterns("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                         .allowedMethods("*")
