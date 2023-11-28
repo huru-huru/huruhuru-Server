@@ -33,8 +33,6 @@ public class QuestionController {
 
     private final QuestionService testService;
 
-    private final MemberService memberService;
-
     // totalTestCount 조회
     @GetMapping
     public ResponseEntity<Long> getTotalTestCount() {

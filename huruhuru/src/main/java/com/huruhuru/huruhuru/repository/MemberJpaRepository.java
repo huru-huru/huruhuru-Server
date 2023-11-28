@@ -17,7 +17,7 @@ public interface MemberJpaRepository extends JpaRepository<MemberEntity, Long> {
             "ORDER BY SUM(s.bestScore) DESC, m.testCount DESC limit 10")
     List<MemberEntity> findTop10MembersOrderByBestScoreSumAndTestCount();
 
-    @Query("SELECT m FROM MemberEntity m JOIN m.scoreList s " +
+    @Query("SELECT m FROM MemberEntity m LEFT JOIN m.scoreList s " +
             "GROUP BY m.id " +
             "ORDER BY SUM(s.bestScore) DESC, m.testCount DESC")
     List<MemberEntity> findMembersOrderByBestScoreSumAndTestCount();

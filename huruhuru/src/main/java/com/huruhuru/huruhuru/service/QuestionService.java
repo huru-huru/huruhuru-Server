@@ -47,6 +47,10 @@ public class QuestionService {
         return questionJpaRepository.findByCategoryAndTheme(category, theme, sort);
     }
 
+    public Long getTest2Count() {
+        return questionJpaRepository.getTest2Count().orElse(0L);
+    }
+
 
     @Transactional
     public void saveQuestionAndScore(Long memberId, Long theme, Long score) {

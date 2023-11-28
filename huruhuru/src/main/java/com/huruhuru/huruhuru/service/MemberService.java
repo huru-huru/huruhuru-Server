@@ -120,5 +120,4 @@ public class MemberService implements UserDetailsService {
         throw new MemberException.MemberNotFoundException("Member with id " + memberId + " not found");
     }
 
-
 }

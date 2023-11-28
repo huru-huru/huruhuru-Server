@@ -2,6 +2,7 @@ package com.huruhuru.huruhuru.controller;
 
 import com.huruhuru.huruhuru.dto.request.member.MemberAuthRequest;
 import com.huruhuru.huruhuru.service.MemberService;
+import com.huruhuru.huruhuru.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
+    private final QuestionService questionService;
 
     /*
         로그인/회원가입 관련 API
@@ -56,9 +58,11 @@ public class MemberController {
     public ResponseEntity<Map<String, Object>> getRanking(@PathVariable("memberId") Long memberId){
         List<MemberEntity> memberRanking = memberService.getAllSortedMembers();
         MemberRankingGetResponse member = memberService.getMemberRankingById(memberId);
+        Long test2Count = questionService.getTest2Count();
         Map<String, Object> response = new HashMap<>();
         response.put("Top10", memberRanking);
         response.put("MyRanking", member);
+        response.put("test2Count", test2Count);
         return ResponseEntity.ok(response);
     }
 
