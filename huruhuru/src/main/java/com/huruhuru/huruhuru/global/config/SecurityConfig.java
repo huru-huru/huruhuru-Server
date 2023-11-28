@@ -16,7 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-
+import java.util.List;
 
 
 @Configuration
@@ -61,7 +61,11 @@ public class SecurityConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("https://huruhuru.netlify.app", "http://localhost:3000")
                         .allowedOriginPatterns("*")
-                        .allowedMethods("*");
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                        .allowedMethods("*")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+
             }
         };
     }
