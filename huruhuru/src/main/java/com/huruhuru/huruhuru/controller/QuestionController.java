@@ -2,14 +2,18 @@ package com.huruhuru.huruhuru.controller;
 
 import com.huruhuru.huruhuru.domain.entity.MemberEntity;
 import com.huruhuru.huruhuru.domain.entity.QuestionEntity;
+import com.huruhuru.huruhuru.domain.entity.ScoreEntity;
+import com.huruhuru.huruhuru.dto.ScoreDto;
 import com.huruhuru.huruhuru.dto.ScoreRequest;
 import com.huruhuru.huruhuru.repository.MemberJpaRepository;
 import com.huruhuru.huruhuru.repository.QuestionJpaRepository;
 import com.huruhuru.huruhuru.service.MemberService;
 import com.huruhuru.huruhuru.service.QuestionService;
 import com.huruhuru.huruhuru.global.exception.MemberException;
+import com.huruhuru.huruhuru.service.ScoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -24,6 +28,7 @@ import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -94,4 +99,22 @@ public class QuestionController {
         return ResponseEntity.ok("Score saved successfully.");
     }
 
+
+    @Autowired
+    private ScoreService scoreService;
+
+    @GetMapping("/total")
+    public ResponseEntity<List<?>> getScoresByMemberId() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userdetail= (String)principal;
+        Long memberId=Long.parseLong(userdetail);
+        log.info(String.valueOf(memberId));
+        List<ScoreEntity> scores = scoreService.getScoresByMemberId(memberId);
+
+        List<ScoreDto> scoreDtos = scores.stream()
+                .map(scoreService::convertToDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(scoreDtos);
+    }
 }

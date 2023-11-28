@@ -59,7 +59,7 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*")
+                        .allowedOrigins("https://huruhuru.netlify.app", "http://localhost:3000")
                         .allowedOriginPatterns("*")
                         .allowedMethods("*");
             }
