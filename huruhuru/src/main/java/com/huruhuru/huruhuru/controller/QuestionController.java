@@ -7,6 +7,7 @@ import com.huruhuru.huruhuru.repository.MemberJpaRepository;
 import com.huruhuru.huruhuru.repository.QuestionJpaRepository;
 import com.huruhuru.huruhuru.service.MemberService;
 import com.huruhuru.huruhuru.service.QuestionService;
+import com.huruhuru.huruhuru.global.exception.MemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,22 @@ public class QuestionController {
     // totalTestCount 1 증가
     @PutMapping
     public ResponseEntity<Map<String, Long>> plusTotalTestCount(@RequestParam("category") Long category, @RequestParam("theme") Long theme) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userdetail= (String)principal;
+        Long memberId=Long.parseLong(userdetail);
+
         testService.plusTotalTestCount(category, theme);
+
+        // id로 member 찾고 testCount 증가
+        Optional<MemberEntity> optionalMember = memberJpaRepository.findById(memberId);
+        if (optionalMember.isPresent()) {
+            MemberEntity member = optionalMember.get();
+            member.increaseTestCount();
+            memberJpaRepository.save(member);  // Update the member
+        } else {
+            throw new MemberException.MemberNotFoundException("Member with id " + memberId + " not found");
+        }
+
         // id로 testCount 조회
         Long TestCountWithCategoryAndTheme = testService.getTestCountByCategoryAndTheme(category, theme);
 
