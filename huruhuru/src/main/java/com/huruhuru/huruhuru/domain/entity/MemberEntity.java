@@ -88,4 +88,8 @@ public class MemberEntity extends BaseTimeEntity implements UserDetails {
     public boolean isEnabled() {
         return true;    // true: 활성화
     }
+
+    public void setTotalBestScore(Long totalBestScore) {
+        this.totalBestScore = totalBestScore;
+    }
 }
