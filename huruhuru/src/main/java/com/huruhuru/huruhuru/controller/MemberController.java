@@ -29,12 +29,11 @@ public class MemberController {
         로그인/회원가입 관련 API
      */
 
-    @PostMapping("signup")
+    @PostMapping("signup") // 회원가입 + 로그인
     public ResponseEntity<Map<String, Object>> signup(@RequestBody MemberAuthRequest request) {
         Long id = memberService.save(request);
-        Map<String, Object> response = new HashMap<>();
-        response.put("id", id);
-        return ResponseEntity.created(null).body(response);
+        Map<String, Object> response = memberService.login(request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("login")
