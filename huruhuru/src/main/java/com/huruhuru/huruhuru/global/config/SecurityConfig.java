@@ -62,7 +62,9 @@ public class SecurityConfig {
                         .allowedOrigins("https://huruhuru.netlify.app", "http://localhost:3000")
                         .allowedOriginPatterns("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-                        .allowedMethods("*");
+                        .allowedMethods("*")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
 
             }
         };
