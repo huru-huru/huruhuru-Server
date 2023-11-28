@@ -6,10 +6,11 @@ import com.huruhuru.huruhuru.global.CustomUserDetail;
 import com.huruhuru.huruhuru.global.exception.MemberException;
 import com.huruhuru.huruhuru.repository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.data.domain.Pageable;
 import java.util.HashMap;
 import java.util.List;
 
@@ -103,8 +104,13 @@ public class MemberService implements UserDetailsService {
     /*
         랭킹 관련 로직
      */
+
+//    public List<MemberEntity> getAllSortedMembers(){
+//        return memberJpaRepository.findTop10MembersOrderByBestScoreSumAndTestCount();
+//    }
+
     public List<MemberEntity> getAllSortedMembers(){
-        return memberJpaRepository.findTop10MembersOrderByBestScoreSumAndTestCount();
+        return memberJpaRepository.findMembersOrderByBestScoreSumAndTestCountRank();
     }
 
     public MemberRankingGetResponse getMemberRankingById(Long memberId) {
@@ -113,12 +119,11 @@ public class MemberService implements UserDetailsService {
             if (allSortedMembers.get(i).getId().equals(memberId)) {
                 MemberRankingGetResponse memberRankingDTO = new MemberRankingGetResponse();
                 memberRankingDTO.setMember(allSortedMembers.get(i));
-                memberRankingDTO.setRanking(i + 1L); // 랭킹 정보 추가
+                memberRankingDTO.setRanking(i + 0L); // 랭킹 정보 추가
                 return memberRankingDTO;
             }
         }
         throw new MemberException.MemberNotFoundException("Member with id " + memberId + " not found");
     }
-
 
 }

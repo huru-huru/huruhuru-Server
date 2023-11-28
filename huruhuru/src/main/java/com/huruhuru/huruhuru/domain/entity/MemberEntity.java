@@ -91,7 +91,18 @@ public class MemberEntity extends BaseTimeEntity implements UserDetails {
         return true;    // true: 활성화
     }
 
+
+
+    public void increaseTestCount() {
+        this.testCount += 1;
+    }
+
+    public void setTotalBestScore(Long totalBestScore) {
+        this.totalBestScore = totalBestScore;
+    }
+
     public void addTotalBestScore(Long totalBestScore) {
         this.totalBestScore = this.totalBestScore + totalBestScore;
+
     }
 }

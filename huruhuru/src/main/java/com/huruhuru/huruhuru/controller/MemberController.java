@@ -2,7 +2,10 @@ package com.huruhuru.huruhuru.controller;
 
 import com.huruhuru.huruhuru.dto.request.member.MemberAuthRequest;
 import com.huruhuru.huruhuru.service.MemberService;
+import com.huruhuru.huruhuru.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +27,7 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
+    private final QuestionService questionService;
 
     /*
         로그인/회원가입 관련 API
@@ -52,13 +56,23 @@ public class MemberController {
     // 3. 만약 점수가 같다면 각 멤버의 총 테스트 횟수를 비교하여 내림차순으로 정렬
     // 4. 1위부터 10위까지 순서대로 멤버의 nickname, test_count, member의 best_score 합산 반환
     // 5. 멤버 id 값으로 받은 멤버의 순위를 반환
-    @GetMapping("score/{memberId}")
-    public ResponseEntity<Map<String, Object>> getRanking(@PathVariable("memberId") Long memberId){
+    @GetMapping("score")
+    public ResponseEntity<Map<String, Object>> getRanking(){
+        // 토큰으로 부터 memberId 가져오기
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userdetail= (String)principal;
+        Long memberId=Long.parseLong(userdetail);
+
         List<MemberEntity> memberRanking = memberService.getAllSortedMembers();
+        memberRanking.forEach(member -> {
+            System.out.println("ID: " + member.getId() + ", Nickname: " + member.getNickname() + ", Score: " + member.getTotalBestScore() + ", Test Count: " + member.getTestCount());
+        });
         MemberRankingGetResponse member = memberService.getMemberRankingById(memberId);
+        Long test2Count = questionService.getTest2Count();
         Map<String, Object> response = new HashMap<>();
         response.put("Top10", memberRanking);
         response.put("MyRanking", member);
+        response.put("test2Count", test2Count);
         return ResponseEntity.ok(response);
     }
 
