@@ -4,6 +4,7 @@ import com.huruhuru.huruhuru.dto.request.member.MemberAuthRequest;
 import com.huruhuru.huruhuru.service.MemberService;
 import com.huruhuru.huruhuru.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,10 +58,15 @@ public class MemberController {
     // 5. 멤버 id 값으로 받은 멤버의 순위를 반환
     @GetMapping("score")
     public ResponseEntity<Map<String, Object>> getRanking(){
+        // 토큰으로 부터 memberId 가져오기
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userdetail= (String)principal;
         Long memberId=Long.parseLong(userdetail);
+
         List<MemberEntity> memberRanking = memberService.getAllSortedMembers();
+        memberRanking.forEach(member -> {
+            System.out.println("ID: " + member.getId() + ", Nickname: " + member.getNickname() + ", Score: " + member.getTotalBestScore() + ", Test Count: " + member.getTestCount());
+        });
         MemberRankingGetResponse member = memberService.getMemberRankingById(memberId);
         Long test2Count = questionService.getTest2Count();
         Map<String, Object> response = new HashMap<>();
