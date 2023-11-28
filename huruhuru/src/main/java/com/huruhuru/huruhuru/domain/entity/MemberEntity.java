@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +22,7 @@ import java.util.Collection;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "member")
+@Slf4j
 public class MemberEntity extends BaseTimeEntity implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -89,7 +91,7 @@ public class MemberEntity extends BaseTimeEntity implements UserDetails {
         return true;    // true: 활성화
     }
 
-    public void setTotalBestScore(Long totalBestScore) {
-        this.totalBestScore = totalBestScore;
+    public void addTotalBestScore(Long totalBestScore) {
+        this.totalBestScore = this.totalBestScore + totalBestScore;
     }
 }

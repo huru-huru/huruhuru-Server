@@ -59,6 +59,9 @@ public class QuestionService {
         if (existingScore.isPresent()) {
             ScoreEntity currentScore = existingScore.get();
             if (score > currentScore.getBestScore()) {
+                member.addTotalBestScore(score- currentScore.getBestScore());
+                memberJpaRepository.save(member);
+                memberJpaRepository.flush();
                 currentScore.saveBestScore(score);
                 scoreJpaRepository.save(currentScore);
 
@@ -71,6 +74,8 @@ public class QuestionService {
                     .bestScore(score)
                     .build();
             scoreJpaRepository.save(newScore);
+            member.addTotalBestScore(score);
+            memberJpaRepository.save(member);
         }
     }
 
