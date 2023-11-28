@@ -92,10 +92,6 @@ public class MemberEntity extends BaseTimeEntity implements UserDetails {
     }
 
     public void addTotalBestScore(Long totalBestScore) {
-        log.info(String.valueOf(this.totalBestScore));
-        log.info(String.valueOf(totalBestScore));
         this.totalBestScore = this.totalBestScore + totalBestScore;
-        log.info(String.valueOf(this.totalBestScore));
-
     }
 }
