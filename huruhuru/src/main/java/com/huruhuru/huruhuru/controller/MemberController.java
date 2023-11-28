@@ -4,6 +4,7 @@ import com.huruhuru.huruhuru.dto.request.member.MemberAuthRequest;
 import com.huruhuru.huruhuru.service.MemberService;
 import com.huruhuru.huruhuru.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,8 +55,11 @@ public class MemberController {
     // 3. 만약 점수가 같다면 각 멤버의 총 테스트 횟수를 비교하여 내림차순으로 정렬
     // 4. 1위부터 10위까지 순서대로 멤버의 nickname, test_count, member의 best_score 합산 반환
     // 5. 멤버 id 값으로 받은 멤버의 순위를 반환
-    @GetMapping("score/{memberId}")
-    public ResponseEntity<Map<String, Object>> getRanking(@PathVariable("memberId") Long memberId){
+    @GetMapping("score")
+    public ResponseEntity<Map<String, Object>> getRanking(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userdetail= (String)principal;
+        Long memberId=Long.parseLong(userdetail);
         List<MemberEntity> memberRanking = memberService.getAllSortedMembers();
         MemberRankingGetResponse member = memberService.getMemberRankingById(memberId);
         Long test2Count = questionService.getTest2Count();
