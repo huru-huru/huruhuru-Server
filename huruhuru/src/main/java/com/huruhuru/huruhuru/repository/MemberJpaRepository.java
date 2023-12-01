@@ -13,21 +13,7 @@ public interface MemberJpaRepository extends JpaRepository<MemberEntity, Long> {
     boolean existsByNickname(String nickname);
     Optional<MemberEntity> findByNickname(String nickname);
 
-//    @Query("SELECT m FROM MemberEntity m JOIN m.scoreList s " +
-//            "GROUP BY m.id " +
-//            "ORDER BY SUM(s.bestScore) DESC, m.testCount DESC limit 10")
-//    List<MemberEntity> findTop10MembersOrderByBestScoreSumAndTestCount();
 
-    @Query("SELECT m FROM MemberEntity m JOIN m.scoreList s " +
-            "GROUP BY m.id " +
-            "ORDER BY SUM(s.bestScore) DESC, m.testCount DESC")
-    List<MemberEntity> findTop10MembersOrderByBestScoreSumAndTestCount();
-
-
-//    @Query("SELECT m FROM MemberEntity m LEFT JOIN m.scoreList s " +
-//            "GROUP BY m.id " +
-//            "ORDER BY SUM(s.bestScore) DESC, m.testCount DESC")
-//    List<MemberEntity> findMembersOrderByBestScoreSumAndTestCount();
 
     @Query("SELECT m FROM MemberEntity m LEFT JOIN m.scoreList s " +
             "GROUP BY m.id " +
@@ -36,4 +22,10 @@ public interface MemberJpaRepository extends JpaRepository<MemberEntity, Long> {
 
     @Query("SELECT m FROM MemberEntity m ORDER BY m.totalBestScore DESC, m.testCount DESC limit 10")
     List<MemberEntity> findMembersOrderByBestScoreSumAndTestCountRank();
+
+//    @Query("SELECT m FROM MemberEntity m JOIN m.scoreList s " +
+//            "GROUP BY m.id " +
+//            "ORDER BY SUM(s.bestScore) DESC, m.testCount DESC")
+//    List<MemberEntity> findTop10MembersOrderByBestScoreSumAndTestCount();
+
 }

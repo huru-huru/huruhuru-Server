@@ -27,9 +27,9 @@ public interface QuestionJpaRepository extends JpaRepository<QuestionEntity, Lon
     @Query("SELECT SUM(q.testCount) FROM QuestionEntity q WHERE q.category = :category AND q.theme = :theme")
     Optional<Long> getTestCountByCategoryAndTheme(@Param("category") Long category, @Param("theme") Long theme);
 
-    // test2의 testCount
-    @Query("SELECT SUM(q.testCount) FROM QuestionEntity q WHERE q.category = 2")
-    Optional<Long> getTest2Count();
+    // test2의 testCount -> member의 수를 전달하는 것으로 변경
+//    @Query("SELECT SUM(q.testCount) FROM QuestionEntity q WHERE q.category = 2")
+//    Optional<Long> getTest2Count();
 
     List<QuestionEntity> findByCategoryAndTheme(Long category, Long theme, Sort sort);
 
