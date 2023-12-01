@@ -23,6 +23,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Member;
 import java.util.List;
@@ -47,6 +48,7 @@ public class QuestionController {
     }
 
     // totalTestCount 1 증가
+    @Transactional
     @PutMapping
     public ResponseEntity<Map<String, Long>> plusTotalTestCount(@RequestParam("category") Long category, @RequestParam("theme") Long theme) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

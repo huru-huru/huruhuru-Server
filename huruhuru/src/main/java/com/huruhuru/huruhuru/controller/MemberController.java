@@ -68,11 +68,11 @@ public class MemberController {
             System.out.println("ID: " + member.getId() + ", Nickname: " + member.getNickname() + ", Score: " + member.getTotalBestScore() + ", Test Count: " + member.getTestCount());
         });
         MemberRankingGetResponse member = memberService.getMemberRankingById(memberId);
-        Long test2Count = questionService.getTest2Count();
+        Long memberCount = memberService.getMemberCount();
         Map<String, Object> response = new HashMap<>();
         response.put("Top10", memberRanking);
         response.put("MyRanking", member);
-        response.put("test2Count", test2Count);
+        response.put("test2Count", memberCount);
         return ResponseEntity.ok(response);
     }
 
