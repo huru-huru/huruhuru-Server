@@ -11,6 +11,7 @@ import com.huruhuru.huruhuru.service.MemberService;
 import com.huruhuru.huruhuru.service.QuestionService;
 import com.huruhuru.huruhuru.global.exception.MemberException;
 import com.huruhuru.huruhuru.service.ScoreService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Member;
 import java.util.List;
@@ -50,22 +52,29 @@ public class QuestionController {
     // totalTestCount 1 증가
     @Transactional
     @PutMapping
-    public ResponseEntity<Map<String, Long>> plusTotalTestCount(@RequestParam("category") Long category, @RequestParam("theme") Long theme) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String userdetail= (String)principal;
-        Long memberId=Long.parseLong(userdetail);
+    public ResponseEntity<Map<String, Long>> plusTotalTestCount(@RequestParam("category") Long category, @RequestParam("theme") Long theme, HttpServletRequest request) {
+        String token = getTokenFromRequest(request);  // HTTP 요청 헤더에서 토큰 추출
 
-        testService.plusTotalTestCount(category, theme);
+        // 토큰이 존재하면 member의 testCount 증가
+        if(token != null) {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String userdetail= (String)principal;
+            Long memberId=Long.parseLong(userdetail);
 
-        // id로 member 찾고 testCount 증가
-        Optional<MemberEntity> optionalMember = memberJpaRepository.findById(memberId);
-        if (optionalMember.isPresent()) {
-            MemberEntity member = optionalMember.get();
-            member.increaseTestCount();
-            memberJpaRepository.save(member);  // Update the member
-        } else {
-            throw new MemberException.MemberNotFoundException("Member with id " + memberId + " not found");
+            // id로 member 찾고 testCount 증가
+            Optional<MemberEntity> optionalMember = memberJpaRepository.findById(memberId);
+            if (optionalMember.isPresent()) {
+                MemberEntity member = optionalMember.get();
+                member.increaseTestCount();
+                memberJpaRepository.save(member);  // Update the member
+            } else {
+                throw new MemberException.MemberNotFoundException("Member with id " + memberId + " not found");
+            }
         }
+
+        // 토큰이 없어도 totalTestCount 증가
+        // totalTestCount 1 증가
+        testService.plusTotalTestCount(category, theme);
 
         // id로 testCount 조회
         Long TestCountWithCategoryAndTheme = testService.getTestCountByCategoryAndTheme(category, theme);
@@ -73,6 +82,14 @@ public class QuestionController {
         Map<String, Long> response = Map.of("testCount", TestCountWithCategoryAndTheme);
         return ResponseEntity.ok(response);
 
+    }
+
+    private String getTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7, bearerToken.length());
+        }
+        return null;
     }
 
 
