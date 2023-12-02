@@ -119,7 +119,7 @@ public class MemberService implements UserDetailsService {
             if (allSortedMembers.get(i).getId().equals(memberId)) {
                 MemberRankingGetResponse memberRankingDTO = new MemberRankingGetResponse();
                 memberRankingDTO.setMember(allSortedMembers.get(i));
-                memberRankingDTO.setRanking(i + 0L); // 랭킹 정보 추가
+                memberRankingDTO.setRanking(i + 1L); // 랭킹 정보 추가 (1위부터 시작)
                 return memberRankingDTO;
             }
         }
